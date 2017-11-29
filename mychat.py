@@ -45,21 +45,24 @@ class Hello(Thread):
 
 
     def hello(self):
+        print "here"
         try:
-            s = scoket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         except:
             print "Cannot open socket"
             sys.exit(1)
 
+        print "there"
         try:
             s.bind(('', MYPORT+1))
         except:
             print "Cannot bind to port"
             sys.exit(1)
 
+        print "everywhere"
         try:
             s.sendto('HELLO', (THEIRIP, THEIRPORT))
-        except:
+        except OSError as err:
             print 'Cannot send: {}'.format(err.strerror)
             sys.exit(1)
 
