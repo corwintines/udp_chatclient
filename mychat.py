@@ -37,7 +37,6 @@ class Receiver(Thread):
         for elem in self.partners:
             if(elem[0] == args):
                 self.partners.remove(elem)
-                print(self.partners)
 
     def run(self):
         while True:
