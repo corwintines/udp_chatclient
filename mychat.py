@@ -32,12 +32,12 @@ class Receiver(Thread):
         self.partners = []
 
     def remove_partner(self, addr):
-        print(addr)
-        print('remove')
+        print("Remove: ", addr)
+
         for elem in self.partners:
-            if elem[0] == addr:
-                print(elem)
-                print(elem[0])
+            if(elem[0] == addr):
+                self.partners.remove(elem)
+                print(self.partners)
 
     def run(self):
         while True:
@@ -46,8 +46,11 @@ class Receiver(Thread):
             except OSError as err:
                 print ("Cannot receive from socket: {}".format(err.strerror))
 
+
+            # If the message is a hello message
             if(data[:5] == b'HELLO'):
                 for elem in self.partners:
+                    # if the element is already in the list remove it and then go and re-add it
                     if elem[0] == addr and elem[1] == data[6:]:
                         elem[2].cancel()
                         self.partners.remove(elem)
@@ -59,11 +62,11 @@ class Receiver(Thread):
                             t.daemon = True
                             t.start()
                             self.partners.append([addr, data[6:], t])
-                            print(self.partners)
 
             else:
                 for elem in self.partners:
                     if elem[0] == addr:
+                        print("data?")
                         print((elem[1] + b': ' + data).decode())
 
 
@@ -81,7 +84,7 @@ class Hello(Thread):
             string = str.encode('HELLO ' + self.username)
             for IP in IPADDRESSRANGE:
                 for PORT in PORTRANGE:
-                    self.socket.sendto(string, (IP, PORT))
+                    self.socket.sendto(string, (IP,PORT))
         except OSError as err:
             print ('Cannot send: {}'.format(err.strerror))
             sys.exit(1)
@@ -98,7 +101,7 @@ class Hello(Thread):
             username = input('')
             check = True
             for letter in username:
-                if (letter.isalpha()==True or letter=='_' or letter=='_' or letter!='.'):
+                if (letter.isalpha()==True or letter=='_' or letter=='_' or letter=='.'):
                     check = True
                 else:
                     check = False
