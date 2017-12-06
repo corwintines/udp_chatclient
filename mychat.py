@@ -31,11 +31,11 @@ class Receiver(Thread):
         self.socket = socket
         self.partners = []
 
-    def remove_partner(self, addr):
-        print("Remove: ", addr)
+    def remove_partner(self, args):
+        print("Remove: ", args)
 
         for elem in self.partners:
-            if(elem[0] == addr):
+            if(elem[0] == args):
                 self.partners.remove(elem)
                 print(self.partners)
 
@@ -58,7 +58,7 @@ class Receiver(Thread):
                 for IP in IPADDRESSRANGE:
                     for PORT in PORTRANGE:
                         if ((IP, PORT) == addr):
-                            t = Timer(15.0, lambda: self.remove_partner(addr))
+                            t = Timer(15.0, self.remove_partner, args=[addr])
                             t.daemon = True
                             t.start()
                             self.partners.append([addr, data[6:], t])
@@ -66,7 +66,6 @@ class Receiver(Thread):
             else:
                 for elem in self.partners:
                     if elem[0] == addr:
-                        print("data?")
                         print((elem[1] + b': ' + data).decode())
 
 
@@ -96,15 +95,16 @@ class Hello(Thread):
 
     def create_username(self):
         check = False
+        print ("Enter a username (any letter, number, -, _, or .):")
+        username = input('')
         while(check==False):
-            print("Reenter a valid username")
-            username = input('')
-            check = True
             for letter in username:
-                if (letter.isalpha()==True or letter=='_' or letter=='_' or letter=='.'):
+                if (letter.isalnum() or letter=='_' or letter=='-' or letter=='.'):
                     check = True
                 else:
                     check = False
+                    print("Enter a VALID username (any letter, number, -, _, or.):")
+                    username = input('')
                     break
         self.username = username
 
