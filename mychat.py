@@ -16,7 +16,7 @@ import sys, socket, errno
 
 MYPORT = int(sys.argv[1])
 PORTRANGE = [55000, 55001, 55002, 55003, 55004, 55005, 55006, 55007, 55008]
-IPADDRESSRANGE=['142.66.140.186']
+IPADDRESSRANGE=['127.0.0.1']
 BUFLEN = 1000
 
 for ip in range(21,70):
